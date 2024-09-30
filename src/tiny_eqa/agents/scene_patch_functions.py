@@ -34,5 +34,6 @@ def function_simple_qa(scene: ScenePatch, question: str = None) -> str:
 
 def function_render(scene: ScenePatch, camera_position: Point3D) -> ImagePatch:
     """
+    TODO actually doesn't render, but returns closest image in multiview sequence
     """
     pass
