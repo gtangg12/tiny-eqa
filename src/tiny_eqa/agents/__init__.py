@@ -1,0 +1,1 @@
+from tiny_eqa.agents.agent import Agent

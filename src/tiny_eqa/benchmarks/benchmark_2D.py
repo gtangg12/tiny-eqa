@@ -1,1 +1,0 @@
-from tiny_eqa.benchmarks.benchmark_qa import Benchmark

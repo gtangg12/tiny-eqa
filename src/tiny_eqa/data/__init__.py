@@ -1,0 +1,1 @@
+from tiny_eqa.data.sequence import Scene

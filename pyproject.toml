@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=62.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,7 +7,6 @@ name = "tiny-eqa"
 version = "0.0.1"
 description = "Parameter Efficient 3DQA via Distilling 2D Visual Inference Models"
 readme = "README.md"
-requires-python = ">=3.10.0"
 classifiers = [
     "Programming Language :: Python",
 ]
@@ -16,6 +15,7 @@ dependencies = [
     "natsort",
     "numpy==1.26.4",
     "omegaconf",
+    "openai",
     "torch",
     "torchvision",
     "torchtyping",
