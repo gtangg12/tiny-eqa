@@ -57,10 +57,10 @@ class ModelGptInput:
 class ModelGpt(Model):
     """
     """
-    def __init__(self, config: OmegaConf):
+    def __init__(self, model: str):
         """
         """
-        super().__init__(config)
+        self.model = model
         self.client = OpenAI()
         self.reset()
 
@@ -68,7 +68,7 @@ class ModelGpt(Model):
         """
         """        
         self.messages.append({'role': 'user', 'content': input.content})
-        response = self.client.chat.completions.create(model=self.config.model, messages=self.messages, max_tokens=max_tokens)
+        response = self.client.chat.completions.create(model=self.model, messages=self.messages, max_tokens=max_tokens)
         self.messages.append({'role': 'assistant', 'content': unpack_content(response)})
         return response
 
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     input = ModelGptInput()
     input.append('Caption this image.')
     input.append(Image.open('tests/dice.png'))
-    model = ModelGpt(OmegaConf.create({'model': 'gpt-4-turbo'}))
+    model = ModelGpt(model='gpt-4-turbo')
     response = model(input)
     print(response)
     print()
