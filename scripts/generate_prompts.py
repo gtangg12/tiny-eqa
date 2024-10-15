@@ -43,8 +43,8 @@ def collect_block(lines: list[str], index) -> tuple[str, int]:
         if indent > indent_level:
             block.append(line)
             i += 1
-        else:
-            break
+            continue
+        break
     
     # remove trailing whitespace
     while block[-1].strip() == '':
@@ -82,7 +82,11 @@ if __name__ == '__main__':
     """
     parser = argparse.ArgumentParser(description='Generate prompts for the TinyEQA dataset.')
     parser.add_argument(
-        '-i', '--input_apis', nargs='+', choices=APIS, 
+        '-i', '--instructions',
+        help='Filename of the instructions for the prompt.'
+    )
+    parser.add_argument(
+        '-a', '--apis', nargs='+', choices=APIS, 
         help='List of API files to include. Imports are sorted and headers are concatenated in the provided order'
     )
     parser.add_argument(
@@ -90,21 +94,24 @@ if __name__ == '__main__':
         help='Output filename for generated prompt.'
     )
     args = parser.parse_args()
-    assert len(args.input_apis) == len(set(args.input_apis)), 'APIs must be unique.'
+    assert len(args.apis) == len(set(args.apis)), 'APIs must be unique.'
 
     api2filename = lambda name: f'src/tiny_eqa/agents/{name}.py'
 
     imports_combined = set()
     headers_combined = []
-    for api in args.input_apis:
+    for api in args.apis:
         imports, headers = collect_api(api2filename(api))
         imports_combined.update(imports)
         headers_combined.extend(headers)
     imports_combined = isort.code('\n'.join(imports_combined)) # sort imports by category and alphabetically
     headers_combined = '\n\n\n'.join(headers_combined)
 
-    content = imports_combined + '\n\n' + headers_combined
+    with open(args.instructions, 'r') as f:
+        instructions = f.read()
+    
+    content = instructions + '\n\n' + imports_combined + '\n\n' + headers_combined
     with open(args.prompt_filename, 'w') as f:
         f.write(content)
 
-# python -m scripts.generate_prompts -i common scene_patch image_patch -o prompts/viper_eqa.txt
+# python -m scripts.generate_prompts -i prompts/viper_eqa_instructions.txt -a common scene_patch image_patch -o prompts/viper_eqa.txt

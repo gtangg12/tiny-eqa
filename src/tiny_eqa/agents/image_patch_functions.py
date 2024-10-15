@@ -3,9 +3,7 @@ from omegaconf import OmegaConf
 
 
 class ImagePatch: # typing w/o circular imports
-    """
-    """
-    config = OmegaConf.load('configs/image_patch.yaml')
+    pass
 
 
 def image_find(image: ImagePatch, object_name: str) -> list[ImagePatch]:
